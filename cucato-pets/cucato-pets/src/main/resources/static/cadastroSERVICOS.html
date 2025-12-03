@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Serviço - Cucato Pets</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    .btn-principal {
+      background-color: #2ec4ab !important;
+      color: white !important;
+      font-weight: bold !important;
+      border: none !important;
+    }
+
+    .btn-principal:hover {
+      background-color: #23a890 !important;
+    }
+  </style>
+
+</head>
+
+<body style="margin:0; background-color:#f8f9fa;">
+
+  <nav class="navbar"
+       style="text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; padding-top:20px;">
+    <img src="img/logo.png"
+         style="width:120px; height:120px; object-fit:cover; border-radius:10px; margin-bottom:8px;">
+    <h4 style="margin:0; font-weight:600; font-size:20px;">CUCATO PETS</h4>
+  </nav>
+
+  <hr style="width:100%; height:2px; background-color:#0e0d0d; border:none; margin:20px 0;">
+
+  <h2 class="text-center mt-4">Cadastrar Serviço 🐾</h2>
+
+  <div class="container" style="max-width:500px; background:white; padding:20px; border-radius:10px; border:2px solid #2ec4ab;">
+
+    <label class="form-label">Nome do Pet:</label>
+    <input type="text" class="form-control" id="pet">
+
+    <label class="form-label mt-3">Nome do Tutor:</label>
+    <input type="text" class="form-control" id="tutor">
+
+    <label class="form-label mt-3">Tipo de Serviço:</label>
+    <input type="text" class="form-control" id="servico">
+
+    <label class="form-label mt-3">Horário:</label>
+    <input type="time" class="form-control" id="horario">
+
+    <label class="form-label mt-3">Observação:</label>
+    <textarea class="form-control" id="obs"></textarea>
+
+    <button class="btn mt-4 w-100 btn-principal" onclick="salvarServico()">Cadastrar Serviço</button>
+    <button class="btn btn-secondary mt-3 w-100" onclick="voltar()">Voltar</button>
+
+  </div>
+
+<script>
+async function salvarServico(){
+  const pet = document.getElementById("pet").value;
+  const tutor = document.getElementById("tutor").value;
+  const tipo = document.getElementById("servico").value;
+  const horario = document.getElementById("horario").value;
+  const obs = document.getElementById("obs").value;
+
+  if(!pet || !tutor || !tipo || !horario){
+    alert('Preencha todos os campos obrigatórios!');
+    return;
+  }
+
+  const payload = { pet, tutor, tipo, horario, observacao: obs };
+
+  try {
+    const res = await fetch('/api/servicos', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      alert('Serviço cadastrado com sucesso!');
+      window.location.href = 'pagina_principal.html';
+    } else {
+      const err = await res.text();
+      alert('Erro ao cadastrar: ' + err);
+    }
+
+  } catch(e) {
+    console.error(e);
+    alert('Erro na comunicação com o servidor.');
+  }
+}
+
+function voltar(){
+  window.location.href = "pagina_principal.html";
+}
+</script>
+
+</body>
+</html>
